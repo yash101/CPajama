@@ -17,6 +17,8 @@ namespace base
 			_references = new size_t;					//Allocate a new int for the reference counter
 			*_references = 1;							//Set it to 1 (us only)
 			_numElem = new size_t;						//Allocate space for array length
+			*_numElem = 0;								//We have zero elements
+			_pointer = NULL;							//NULL as a pointer initial value is generally safer, because it is easily detected!
 		}
 
 		Array(size_t numElem)							//Initializer which allocates certain amount of space
@@ -28,7 +30,7 @@ namespace base
 			_pointer = new T[numElem];					//Allocate space for the array, based off the number of elements requested
 		}
 
-		Array(Array<T> array)							//Initializer which loads data from another array, keeping into account ARC
+		Array(Array<T>& array)							//Initializer which loads data from another array, keeping into account ARC
 		{
 			_references = array._references;			//Synchronize the reference counter
 			(*_references)++;							//Increment the reference counter
@@ -50,9 +52,11 @@ namespace base
 				(*_references)--;						//Decrement the reference counter
 				if (*_references <= 0)					//Check if there are zero references; if so, deallocate all memory
 				{
-					delete[] _pointer;					//Deallocate memory
-					delete _references;					//...
-					delete _numElem;					//...	
+					delete _references;					//Deallocate memory
+					if(_pointer != NULL)
+						delete[] _pointer;				//Deallocate memory
+					if(_numElem != NULL)
+						delete _numElem;				//Deallocate memory
 				}
 			}
 		}
@@ -82,6 +86,16 @@ namespace base
 			(*_references) = 1;							//Set the default value for the reference counter (us)
 			(*_numElem) = num;							//Set the number of elements in the array
 			_pointer = new T[*_numElem];				//Allocate more space for our pointer
+		}
+
+		Array<T> clone(size_t num)						//Clones the Array
+		{
+			Array<T> ret(_numElem);						//Create the Array, and allocate space for _numElem elements
+			if (ret() != NULL)							//Check to make sure the pointer is not null
+			{
+				memcpy(ret(), _pointer, _numElem * sizeof(T));	//Copy over the memory
+			}
+			return ret;									//Return the newly constructed Array
 		}
 	};
 }

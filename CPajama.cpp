@@ -3,10 +3,17 @@
 //
 
 #include "stdafx.h"
+#include "base/array.h"
 
+class big
+{
+public:
+	long a, b, c, d, e, f, g;
+};
 
 int main()
 {
-    return 0;
+	base::Array<big> array(10240);
+	return 0;
 }
 
