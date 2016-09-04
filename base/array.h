@@ -75,7 +75,7 @@ namespace base
 		Array<T> allocate(size_t num)
 		{
 			Array<T> ret = (*this);						//We will return the old Array; If unused, the old Array will perform the GC
-			(*_references--);
+			(*_references)--;
 
 			_references = new size_t;					//Yes, we are overwriting the pointer
 			_numElem = new size_t;						//Yes, we are overwriting the pointer
