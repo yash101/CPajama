@@ -1,3 +1,4 @@
+#include "stdafx.h"
 // CPajama.cpp : Defines the entry point for the console application.
 //
 

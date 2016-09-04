@@ -1,6 +1,7 @@
 #pragma once
 #ifndef _CLOSEABLE_H
 #define _CLOSEABLE_H
+#include "../stdafx.h"
 
 namespace io
 {

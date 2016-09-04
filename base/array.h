@@ -1,7 +1,7 @@
 #pragma once
 #ifndef _ARRAY_H
 #define _ARRAY_H
-#include <stddef.h>
+#include "stdafx.h"
 namespace base
 {
 	template<class T> class Array

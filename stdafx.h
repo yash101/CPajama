@@ -7,9 +7,21 @@
 
 #include "targetver.h"
 
-#include <stdio.h>
-#include <tchar.h>
-
+#include <stddef.h>
+#ifdef _WIN32
+#ifdef _WIN64
+#define WINDOWS 1
+#define WINDOWS64 2
+#define ARCH64 3
+#define OS WINDOWS 4
+#else
+#define WINDOWS 1
+#define WINDOWS32 5
+#define ARCH32 6
+#endif
+#else
+#define POSIX 7
+#endif
 
 
 // TODO: reference additional headers your program requires here

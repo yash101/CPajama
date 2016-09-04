@@ -1,7 +1,7 @@
 #pragma once
 #ifndef _IOEXCEPTION_H
 #define _IOEXCEPTION_H
-
+#include "../stdafx.h"
 #include <exception>
 
 namespace io

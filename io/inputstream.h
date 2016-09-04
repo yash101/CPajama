@@ -1,6 +1,7 @@
 #pragma once
 #ifndef _INPUTSTREAM_H
 #define _INPUTSTREAM_H
+#include "../stdafx.h"
 
 namespace io
 {
