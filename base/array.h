@@ -11,37 +11,56 @@ namespace base
 		T* _pointer;									//Pointer to the array
 		size_t* _references;							//Pointer to the int containing the number of references to the pointer
 		size_t* _numElem;
+
+		Array(T* ptr, size_t* ref, size_t* nel) :
+			_pointer(ptr),
+			_references(ref),
+			_numElem(nel)
+		{
+		}
 	public:
-		Array()											//Main empty initializer
+		Array()	:										//Main empty initializer
+			_pointer(NULL),								//Initialize everything to NULL initially
+			_references(NULL),							//...
+			_numElem(NULL)								//...
 		{
 			_references = new size_t;					//Allocate a new int for the reference counter
-			*_references = 1;							//Set it to 1 (us only)
 			_numElem = new size_t;						//Allocate space for array length
+
+			*_references = 1;							//We are the only reference
 			*_numElem = 0;								//We have zero elements
-			_pointer = NULL;							//NULL as a pointer initial value is generally safer, because it is easily detected!
 		}
 
-		Array(size_t numElem)							//Initializer which allocates certain amount of space
+		Array(size_t numElem) :							//Initializer which allocates certain amount of space
+			_pointer(NULL),
+			_references(NULL),
+			_numElem(NULL)
 		{
 			_references = new size_t;					//Allocate a new int for the reference counter
-			*_references = 1;							//Set it to 1 (us only)
 			_numElem = new size_t;						//Allocate space for the array length
+
+			*_references = 1;							//We are the only reference
 			*_numElem = numElem;						//Set the array length
+
 			_pointer = new T[numElem];					//Allocate space for the array, based off the number of elements requested
 		}
 
-		Array(Array<T>& array)							//Initializer which loads data from another array, keeping into account ARC
+		Array(Array<T>& array) :						//Initializer which loads data from another array, keeping into account ARC
+			_references(array._references),
+			_pointer(array._pointer),
+			_numElem(array._numElem)
 		{
-			_references = array._references;			//Synchronize the reference counter
 			(*_references)++;							//Increment the reference counter
-			_pointer = array._pointer;					//Synchronize the data pointer
 		}
 
 		Array<T>& operator=(Array<T> array)				//Assignment operator
 		{
 			_references = array._references;			//Copy over reference counter pointer
-			(*_references)++;							//Increment reference counter
 			_pointer = array._pointer;					//Synchronize pointer
+			_numElem = array._numElem;					//Synchronize the number of elements
+
+			(*_references)++;							//Increment reference counter
+
 			return *this;
 		}
 
@@ -53,10 +72,16 @@ namespace base
 				if (*_references <= 0)					//Check if there are zero references; if so, deallocate all memory
 				{
 					delete _references;					//Deallocate memory
-					if(_pointer != NULL)
+
+					if(_pointer != NULL)				//Check before deallocation
 						delete[] _pointer;				//Deallocate memory
-					if(_numElem != NULL)
+
+					if(_numElem != NULL)				//Check before deallocation
 						delete _numElem;				//Deallocate memory
+
+					_references = NULL;					//Set as NULL, just to make errors more distinguishable
+					_pointer = NULL;					//...
+					_numElem = NULL;					//...
 				}
 			}
 		}
@@ -72,29 +97,35 @@ namespace base
 		}
 
 		T* operator()()									//Gives access to the bare pointer; BE CAREFUL. BAD THINGS CAN HAPPEN
-		{
+		{												//Note, pointer will be NULL if no data has been allocated
 			return _pointer;
 		}
 
-		Array<T> allocate(size_t num)
+		Array<T> allocate(size_t num)					//Allocates a block of memory
 		{
-			Array<T> ret = (*this);						//We will return the old Array; If unused, the old Array will perform the GC
-			(*_references)--;
+			(*_references)--;							//Decrement the reference because we are going to overwrite our pointers
+			Array<T> ret(_pointer, _references, _numElem);//We will return the old Array; If unused, the old Array will perform the GC
 
 			_references = new size_t;					//Yes, we are overwriting the pointer
 			_numElem = new size_t;						//Yes, we are overwriting the pointer
+
 			(*_references) = 1;							//Set the default value for the reference counter (us)
 			(*_numElem) = num;							//Set the number of elements in the array
-			_pointer = new T[*_numElem];				//Allocate more space for our pointer
+
+			_pointer = new T[*_numElem];				//Allocate space for our pointer, replacing its old value
+
+			return ret;									//Return the newly-created object containing the old Array
 		}
 
-		Array<T> clone(size_t num)						//Clones the Array
+		Array<T> clone(size_t num)						//Clones the Array - Creates a new array with a copy of the data and a reset reference counter
 		{
 			Array<T> ret(_numElem);						//Create the Array, and allocate space for _numElem elements
+
 			if (ret() != NULL)							//Check to make sure the pointer is not null
 			{
 				memcpy(ret(), _pointer, _numElem * sizeof(T));	//Copy over the memory
 			}
+
 			return ret;									//Return the newly constructed Array
 		}
 	};

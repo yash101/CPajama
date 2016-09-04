@@ -14,6 +14,10 @@ public:
 int main()
 {
 	base::Array<big> array(10240);
+	for (size_t i = 0; i < 100; i++)
+	{
+		base::Array<big> array2 = array.allocate(i * 10000000);
+	}
 	return 0;
 }
 
