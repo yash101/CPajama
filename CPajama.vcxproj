@@ -147,6 +147,7 @@
   <ItemGroup>
     <ClInclude Include="base.h" />
     <ClInclude Include="base\array.h" />
+    <ClInclude Include="base\exceptions.h" />
     <ClInclude Include="io.h" />
     <ClInclude Include="io\closeable.h" />
     <ClInclude Include="io\inputstream.h" />
@@ -160,8 +161,11 @@
     <ClInclude Include="util.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="base\exceptions.cpp" />
     <ClCompile Include="CPajama.cpp" />
     <ClCompile Include="io\closeable.cpp" />
+    <ClCompile Include="io\inputstream.cpp" />
+    <ClCompile Include="io\ioexception.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>

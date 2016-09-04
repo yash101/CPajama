@@ -11,18 +11,10 @@ namespace io
 	private:
 		const char* _msg;
 	public:
-		IOException() : _msg(NULL)
-		{}
-		IOException(const char* message) : _msg(message)
-		{}
-
-		virtual const char* what() const throw()
-		{
-			return _msg;
-		}
-
-		virtual ~IOException()
-		{}
+		IOException();
+		IOException(const char* message);
+		virtual const char* what() const throw();
+		virtual ~IOException();
 	};
 }
 
