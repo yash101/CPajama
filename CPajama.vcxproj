@@ -166,9 +166,7 @@
     <ClCompile Include="io\closeable.cpp" />
     <ClCompile Include="io\inputstream.cpp" />
     <ClCompile Include="io\ioexception.cpp" />
-    <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-    </ClCompile>
+    <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
