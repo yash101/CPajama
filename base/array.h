@@ -12,10 +12,10 @@ namespace base
 		size_t* _references;							//Pointer to the int containing the number of references to the pointer
 		size_t* _numElem;
 
-		Array(T* ptr, size_t* ref, size_t* nel) :
-			_pointer(ptr),
-			_references(ref),
-			_numElem(nel)
+		Array(T* ptr, size_t* ref, size_t* nel) :		//Initialzer which initializes by values passed to it
+			_pointer(ptr),								//Set the variable values
+			_references(ref),							//...
+			_numElem(nel)								//...
 		{
 		}
 	public:
@@ -32,9 +32,9 @@ namespace base
 		}
 
 		Array(size_t numElem) :							//Initializer which allocates certain amount of space
-			_pointer(NULL),
-			_references(NULL),
-			_numElem(NULL)
+			_pointer(NULL),								//Initialize everything to NULL initially
+			_references(NULL),							//...
+			_numElem(NULL)								//...
 		{
 			_references = new size_t;					//Allocate a new int for the reference counter
 			_numElem = new size_t;						//Allocate space for the array length
@@ -123,7 +123,7 @@ namespace base
 
 			if (ret() != NULL)							//Check to make sure the pointer is not null
 			{
-				memcpy(ret(), _pointer, _numElem * sizeof(T));	//Copy over the memory
+				memcpy(ret(), _pointer, _numElem * sizeof(T));//Copy over the memory
 			}
 
 			return ret;									//Return the newly constructed Array
