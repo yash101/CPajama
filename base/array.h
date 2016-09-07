@@ -66,9 +66,10 @@ namespace base
 
 		~Array()										//Destructor, which does GC (if necessary)
 		{
-			if (_references != NULL)					//Check to make sure we even have a reference counter
+			if (_references != NULL)					//Check to make sure we don't dereference NULL (in the _references)
 			{
 				(*_references)--;						//Decrement the reference counter
+
 				if (*_references <= 0)					//Check if there are zero references; if so, deallocate all memory
 				{
 					delete _references;					//Deallocate memory
@@ -83,6 +84,7 @@ namespace base
 					_pointer = NULL;					//...
 					_numElem = NULL;					//...
 				}
+
 			}
 		}
 
@@ -103,8 +105,7 @@ namespace base
 
 		Array<T> allocate(size_t num)					//Allocates a block of memory
 		{
-			(*_references)--;							//Decrement the reference because we are going to overwrite our pointers
-			Array<T> ret(_pointer, _references, _numElem);//We will return the old Array; If unused, the old Array will perform the GC
+			Array<T> ret(_pointer, _references, _numElem);//We will return the old Array; If unused, the old Array will perform
 
 			_references = new size_t;					//Yes, we are overwriting the pointer
 			_numElem = new size_t;						//Yes, we are overwriting the pointer
