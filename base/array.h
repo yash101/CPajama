@@ -5,7 +5,7 @@
 #include "exceptions.h"
 namespace base
 {
-	template<class T> class Array						//ARC array
+	template<class T> class Array						//ARC (Automatic Reference Counting GC) array
 	{
 	private:
 		T* _pointer;									//Pointer to the array
@@ -128,6 +128,52 @@ namespace base
 			}
 
 			return ret;									//Return the newly constructed Array
+		}
+
+		//Function inlined due to simplicity. Function, inlined, is simpler than jumping to a new location, even in instruction cache
+		inline size_t size()
+		{
+			return _numElem;
+		}
+
+		//Function inlined due to simplicity. Function, inlined, is simpler than jumping to a new location, even in instruction cache
+		inline size_t bytesAllocated()
+		{
+			return _numElem * sizeof(T);
+		}
+
+		//Engulfs an array
+		long engulf(Array<T> array)						//Copies over elements from another array. Returns number of elements left to copy - negative for
+														//number of elements that failed to copy because of insufficient space; positive for extra space
+		{
+			long ret = _numElem - array._numElem;		//Return value, described above
+
+			if (ret < 0)
+			{
+				memcpy(_pointer, array._pointer, array.bytesAllocated());//We are bigger
+			}
+			else if (ret > 0)
+			{
+				memcpy(_pointer, array._pointer, bytesAllocated());//We are smaller
+			}
+			else
+			{
+				memcpy(_pointer, array._pointer, bytesAllocated());//We are same size
+			}
+
+			return ret;
+		}
+
+		//Function inlined due to simplicity. Function, inlined, is simpler than jumping to a new location, even in instruction cache
+		inline bool operator==(Array<T> array)
+		{
+			return array._pointer == _pointer;
+		}
+
+		//Function inlined due to simplicity. Function, inlined, is simpler than jumping to a new location, even in instruction cache
+		inline bool operator!=(Array<T> array)
+		{
+			return array._pointer != _pointer;
 		}
 	};
 }
