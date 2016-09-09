@@ -1,9 +1,11 @@
 #pragma once
 #ifndef _ARRAY_H
 #define _ARRAY_H
+
 #include "stdafx.h"
-#include "exceptions.h"
-namespace base
+#include "exceptions.h"									//Exceptions used by this class
+
+namespace base											//Base functions, classes and stuff
 {
 	template<class T> class Array						//ARC (Automatic Reference Counting GC) array
 	{
